@@ -2,14 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import App1 from './App1';
+
 import reportWebVitals from './reportWebVitals';
+import{BrowserRouter} from 'react-router-dom'   // parte de la dependencia instalada reactRouter-dom
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  //<React.StrictMode> </React.StrictMode>   // lo cambiamos por el siguiente
+    <BrowserRouter>
+       <App />
+    </BrowserRouter>
 );
 //const root1 = ReactDOM.createRoot(document.getElementById('root1'));
 //root.render(

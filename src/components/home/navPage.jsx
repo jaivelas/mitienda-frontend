@@ -1,30 +1,35 @@
 const NavPage = () =>{
     return(
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary row m-0 row-cols-2 row-cols-md-2 g-2">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">MarthaMartha</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+<nav className="navbar navbar-expand-lg navbar navbar-dark bg-primary row m-0 row-cols-0 row-cols-md-2 g-2">
+  <div className="container-fluid">
+    <a className="navbar-brand" href="#">MarthaMartha</a>
+    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Principal</a>
+
+ 
+    <div className="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul className="navbar-nav">
+        <li className="nav-item">
+          <a className="nav-link active" aria-current="page" href="/">Principal</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Retablos</a>
+        <li className="nav-item">
+          <a className="nav-link" href="#">Retablos</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Accesorios</a>
+        <li className="nav-item">
+          <a className="nav-link" href="#">Accesorios</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li className="nav-item dropdown">
+          <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Otros
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Pinturas</a></li>
-            <li><a class="dropdown-item" href="#">Madera</a></li>
-            <li><a class="dropdown-item" href="#">OtrosMateriales</a></li>
+          <ul className="dropdown-menu">
+            <li><a className="dropdown-item" href="/cliente">Clientes</a></li>
+            <li><a className="dropdown-item" href="/producto">Productos</a></li>
+            <li><a className="dropdown-item" href="/categoria">Categorias</a></li>
+
+            <li><a className="dropdown-item" href="/factura">Facturas</a></li>
+            <li><a className="dropdown-item" href="comentario">Comentarios</a></li>
           </ul>
         </li>
       </ul>
