@@ -121,16 +121,16 @@ const eliminar = async (id) => {
                                 </thead>
                                 <tbody>{/* aca iniciamos las filas de contenido*/}
                                     {
-                                        facturas.map((fact, index) => (  // aca voy a iterar para mostrarlos datos traidos en la linea 13*
+                                        facturas.map((fact, index) => (// aca voy a iterar para mostrarlos datos traidos en la linea 13*
                                             // mapiando facturas (definido en al linea linea 13) en la variable prod
                                             <tr key={fact._id}>
                                                 <th scope="row">{index + 1}</th>
-                                                <td>{fact.numero}</td>      {/*// saco el elemento nombre del 'JSON' */}
-                                                <td>{fact.fecha}</td>
+                                                <td>{fact.numero}</td>{/*// saco el elemento nombre del 'JSON' */}
+                                                <td>{fact.fecha.substring(0,10)}</td>
                                                 <td>{fact.idCliente}</td>
                                                 <td>{fact.total}</td>
                                                 <td>{fact.direccion}</td>
-                                                <td className='text-center '> {/*// Para la columna opciones defino dos botones con icono (editar y eliminar)*/}
+                                                <td className='text-center '>{/*// Para la columna opciones defino dos botones con icono (editar y eliminar)*/}
                                                     <button type="button" className="btn btn-outline-warning " title='Editar'>
                                                         <i className="fa-solid fa-pencil"></i>  {/*// icono de lapiz*/}
                                                     </button>

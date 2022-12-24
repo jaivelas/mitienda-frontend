@@ -7,7 +7,7 @@ import NavPage from '../home/navPage';
 
 const ListProducto = () => {
     //definimos el url ruta del del servidor backend
-    const url = 'http://localhost:5000/';
+    const url = 'https://mitienda-backend-7u6f.onrender.com/'; // cuando despliega servido cambia esta ruta
     // hacemos un array para que reciba la info del los registros (bueno los documentos)
     //para llenar la tabla
     const [productos, setProductos] = useState([]);   // defino la variable - podia ser [datos,setDatos]
@@ -26,45 +26,92 @@ const ListProducto = () => {
 
     useEffect(() => {
         listarProducto()   // llamo la funcion creada con UseEffect para que solo se ejecute una vez
-    },[])
-    
+    }, [])
+
 
     /* asigno las variables a los campos del formulario */
-    const [nombre, setNombre]= useState('')
-    const [cantidad, setCantidad]= useState('')
-    const [precio, setPrecio]= useState('')
-    const [costo, setCosto]= useState('')
-    const [idCategoria, setIdCategoria]= useState('')
-    const [imagen, setImagen]= useState('')
+    const [_id, setId] = useState('')
+    const [nombre, setNombre] = useState('')
+    const [cantidad, setCantidad] = useState('')
+    const [precio, setPrecio] = useState('')
+    const [costo, setCosto] = useState('')
+    const [idCategoria, setIdCategoria] = useState('')
+    const [imagen, setImagen] = useState('')
 
-/* funcion para guardar los campos del formulario de adicion */
-    const guardar = (event) =>{
-        event.preventDefault()
-        axios.post(url+"producto",{
-            nombre, cantidad, precio,costo,idCategoria,imagen
-        })
-        .then(res =>{   //Borramos los campos y cerramos la ventana)
-            setNombre('')
-            setCantidad('')
-            setPrecio('')
-            setCosto('')
-            setIdCategoria('')
-            setImagen('')
-            const btnClose = document.getElementById('btnClose')
-            btnClose.click()
-            console.log("producto debio ser crerada")
-            listarProducto()
-        })
-        .catch(err => console.log(err))
+    /* funcion para guardar los campos del formulario de adicion */
+    const guardar = (event) => {
+        event.preventDefault();
+        if (_id.length == 0) {
+            axios.post(url + "producto", {
+                nombre, cantidad, precio, costo, idCategoria, imagen
+            })
+                .then(res => limpiar())   //Borramos los campos y cerramos la ventana)
+                .catch(err => console.log(err))
+        }
+        else {
+            axios.put(url + "producto", {
+                _id, nombre, cantidad, precio, costo, idCategoria, imagen
+            })
+                .then(res => limpiar())   //Borramos los campos y cerramos la ventana)
+                .catch(err => console.log(err))
+
+        }
     }
 
-/**
- * vamos ahacer el metodo para eliminar (borrar) los registros
- */
-const eliminar = async (id) => {
-    await axios.delete(url+"producto/"+id)
-    .then(res=>listarProducto())
-    .catch(err => console.log(err))
+    /**
+     * limpiar
+     */
+    const limpiar = () => {
+        setNombre('')
+        setCantidad('')
+        setPrecio('')
+        setCosto('')
+        setIdCategoria('')
+        setImagen('')
+        const btnClose = document.getElementById('btnClose')
+        btnClose.click()
+        console.log("producto debio ser crerada")
+        listarProducto()
+
+    }
+
+    /**
+     * vamos ahacer el metodo para eliminar (borrar) los registros
+     */
+    const eliminar = async (id) => {
+        await axios.delete(url + "producto/" + id)
+            .then(res => listarProducto())
+            .catch(err => console.log(err))
+    }
+
+    /**
+     * vamos ahacer el metodo para editar los registros
+     */
+    const editar = (data) => {
+        setId(data._id);
+        setNombre(data.nombre);
+        setCantidad(data.cantidad);
+        setPrecio(data.precio);
+        setCosto(data.costo);
+        setIdCategoria(data.idCategoria);
+        setImagen(data.imagen);
+
+        const btnNuevo = document.getElementById('btnNuevo')
+        btnNuevo.click();
+    }
+
+    /**
+     * funcion buscar
+     */
+    const buscar = async (nom) =>{
+        if (nom.length == 0){
+            listarProducto()
+        }
+        else{
+        await axios.get(url+'producto/nom/'+nom)     // el url definido en el router de buscar
+        .then( res => setProductos(res.data))
+        .catch(err =>console.log(err))
+    }
 }
 
     // ahora voy a hacer la página de listar productos
@@ -89,7 +136,7 @@ const eliminar = async (id) => {
                 <div className="card-body">{/*// defino un marco para el siguiente contenido*/}
                     <div className='row'>{/*// defino una fila para contenido*/}
                         <div className='col-4'> {/*// un campo de captura de info (nombre)*/}
-                            <input type="search" className="form-control" placeholder="escribe nombre" />
+                            <input type="search" onKeyUp={(e)=>buscar(e.target.value)} className="form-control" placeholder="escribe nombre" />
                         </div>
                         <div className='col-2 text-end'> {/*Boton de buscar con icono lupa */}
                             <button type="button" className="btn btn-outline-primary" title='Buscar'>
@@ -97,7 +144,7 @@ const eliminar = async (id) => {
                             </button>
                         </div>
                         <div className='col-3 text-end'>{/* boton de agregar con icono mas*/}
-                            <button type="button" className="btn btn-outline-primary" title='crear' data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" id='btnNuevo' className="btn btn-outline-primary" title='crear' data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 {/* definimos el modal para el pop screen de toma de datos, esta mas abajo
                                 trajimos codigo del bootstrap para que cuando presionemos el boton guardar mande la informacion
                                 de los campos*/}
@@ -117,7 +164,7 @@ const eliminar = async (id) => {
                                         <th scope="col">Inventario</th>
                                         <th scope="col" className='text-center'>Opciones</th>
                                     </tr>
-                                    
+
                                 </thead>
                                 <tbody>{/* aca iniciamos las filas de contenido*/}
                                     {
@@ -131,10 +178,10 @@ const eliminar = async (id) => {
                                                 <td>{prod.cantidad}</td>
 
                                                 <td className='text-center '> {/*// Para la columna opciones defino dos botones con icono (editar y eliminar)*/}
-                                                    <button type="button" className="btn btn-outline-warning " title='Editar'>
+                                                    <button type="button" onClick={() => editar(prod)} className="btn btn-outline-warning " title='Editar'>
                                                         <i className="fa-solid fa-pencil"></i>  {/*// icono de lapiz*/}
                                                     </button>
-                                                    <button type="button" onClick={()=>{eliminar(prod._id)}} className="btn btn-outline-danger" title='Eliminar'>
+                                                    <button type="button" onClick={() => { eliminar(prod._id) }} className="btn btn-outline-danger" title='Eliminar'>
                                                         <i className="fa-solid fa-trash-can"></i> borrar {/*// icono de basura*/}
                                                     </button>
                                                 </td>
@@ -160,14 +207,14 @@ const eliminar = async (id) => {
                             <form onSubmit={guardar}>
                                 <div className='col-6'>
                                     <div className="mb-1">
-                                        <label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
-                                        <input type="text" onChange = {(e) => setNombre(e.target.value)} className="form-control" required />
+                                        <label htmlFor="recipient-name" className="col-form-label">Nombre:_A</label>
+                                        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} className="form-control" required />
                                     </div>
                                 </div>
                                 <div className='col-6'>
                                     <div className="mb-1">
-                                        <label htmlFor="recipient-name" className="col-form-label">Categoria:</label>
-                                        <input type="text" onChange = {(e) => setIdCategoria(e.target.value)} className="form-control" required />
+                                        <label htmlFor="recipient-name" className="col-form-label">Categoria_A:</label>
+                                        <input type="text" value={idCategoria} onChange={(e) => setIdCategoria(e.target.value)} className="form-control" required />
                                     </div>
                                 </div>
 
@@ -175,26 +222,26 @@ const eliminar = async (id) => {
                                     <div className='col-4'>
                                         <div className="mb-1">
                                             <label htmlFor="recipient-name" className="col-form-label">Cantidad:</label>
-                                            <input type="number" onChange = {(e) => setCantidad(e.target.value)} className="form-control" required />
+                                            <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="form-control" required />
                                         </div>
                                     </div>
                                     <div className='col-4'>
                                         <div className="mb-1">
                                             <label htmlFor="recipient-name" className="col-form-label">Precio:</label>
-                                            <input type="number" onChange = {(e) => setPrecio(e.target.value)} className="form-control" required />
+                                            <input type="number" value={precio} onChange={(e) => setPrecio(e.target.value)} className="form-control" required />
                                         </div>
                                     </div>
                                     <div className='col-4'>
                                         <div className="mb-1">
                                             <label htmlFor="recipient-name" className="col-form-label">Costo:</label>
-                                            <input type="number" onChange = {(e) => setCosto(e.target.value)} className="form-control" required />
+                                            <input type="number" value={costo} onChange={(e) => setCosto(e.target.value)} className="form-control" required />
                                         </div>
                                     </div>
                                 </div>
                                 <div className='col-8'>
                                     <div className="mb-1">
                                         <label htmlFor="recipient-name" className="col-form-label">Imagen:</label>
-                                        <input type="text" onChange = {(e) => setImagen(e.target.value)} className="form-control" id="recipient-name6" />
+                                        <input type="text" value={imagen} onChange={(e) => setImagen(e.target.value)} className="form-control" id="recipient-name6" />
                                     </div>
                                 </div>
 
